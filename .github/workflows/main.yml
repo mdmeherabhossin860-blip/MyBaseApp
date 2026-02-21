@@ -1,0 +1,28 @@
+name: Build APK For Mehrab Sir
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04  # আমরা স্টেবল ভার্সন ব্যবহার করছি
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -ig libncurses5
+          pip install --upgrade pip
+          pip install buildozer kivy
+
+      - name: Build with Buildozer
+        uses: ArtemSerebrennikov/buildozer-action@v1
+        with:
+          buildozer_version: stable
+          command: buildozer android debug
+          repository_display_name: MyPocoApp
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: bin/*.apk
