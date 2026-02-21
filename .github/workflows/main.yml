@@ -7,14 +7,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # এই স্টেপটি আপনার জন্য সব প্রয়োজনীয় প্যাকেজ অটোমেটিক সেট করে দেবে
-      - name: Build with Buildozer
-        uses: ArtemSerebrennikov/buildozer-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          buildozer_version: stable
-          command: buildozer android debug
+          python-version: '3.10'
 
-      # অ্যাপ তৈরি হয়ে গেলে সেটি সেভ করা
+      - name: Install Buildozer and Kivy
+        run: |
+          pip install --user buildozer kivy
+          # বিল্ডের জন্য প্রয়োজনীয় লাইব্রেরি যা গিটহাবে আগে থেকেই থাকে
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev sqlite3 bzip2 libbz2-dev
+
+      - name: Build with Buildozer
+        run: |
+          # এটি সরাসরি বিল্ড কমান্ড চালাবে
+          yes | /home/runner/.local/bin/buildozer android debug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
