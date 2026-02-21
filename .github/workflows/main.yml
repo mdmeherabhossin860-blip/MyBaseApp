@@ -5,7 +5,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # ভার্সন ৪ ব্যবহার করছি
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -15,17 +15,18 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y libncurses5 libstdc++6
+          # আমরা এখন প্রয়োজনীয় সব লাইব্রেরি একসাথে দিচ্ছি
+          sudo apt install -y libncurses5 libstdc++6 zlib1g-dev ant autoconf libtool
           pip install --upgrade pip
           pip install buildozer kivy
 
       - name: Build with Buildozer
-        # আমরা এখন অফিসিয়াল বা বেশি ব্যবহৃত স্টাইল ব্যবহার করছি
         run: |
+          # সব প্রশ্নের উত্তর অটোমেটিক 'yes' হবে
           yes | buildozer android debug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4  # এখানে v3 বদলে v4 করে দিলাম
+        uses: actions/upload-artifact@v4
         with:
           name: package
           path: bin/*.apk
