@@ -1,4 +1,4 @@
-name: Build APK For Mehrab Sir
+name: Build Empty Skeleton
 on: [push, pull_request]
 
 jobs:
@@ -7,20 +7,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Buildozer
+      - name: Install Essential Tools
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev sqlite3 bzip2 libbz2-dev libstdc++6
+          sudo apt install -y openjdk-17-jdk python3-pip zip unzip
           pip install --user --upgrade Cython==0.29.33 buildozer kivy
 
-      - name: Build with Buildozer
+      - name: Create Skeleton APK
         run: |
           export PATH=$PATH:~/.local/bin
-          # এটি সরাসরি খালি অ্যাপটি বিল্ড করবে
+          # শুধু খোলটা বানানোর কমান্ড
           yes | buildozer android debug
 
-      - name: Upload APK
+      - name: Save My APK
         uses: actions/upload-artifact@v4
         with:
-          name: package
+          name: EmptyApp
           path: bin/*.apk
