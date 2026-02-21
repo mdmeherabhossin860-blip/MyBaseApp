@@ -7,14 +7,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Buildozer
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev sqlite3 bzip2 libbz2-dev libstdc++6
+          pip install --user --upgrade Cython==0.29.33 buildozer kivy
+
       - name: Build with Buildozer
-        # আমরা সরাসরি এই অ্যাকশনটি ব্যবহার করছি যা সবচেয়ে হালকা
-        uses: ArtemSerebrennikov/buildozer-action@v1
-        with:
-          buildozer_version: stable
-          command: buildozer android debug
-          # বিল্ডোজারকে বলছি যেন সে কোনো কিছু আপডেট না করে সরাসরি বিল্ড দেয়
-          buildozer_flags: --verbose
+        run: |
+          export PATH=$PATH:~/.local/bin
+          # এটি সরাসরি খালি অ্যাপটি বিল্ড করবে
+          yes | buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
