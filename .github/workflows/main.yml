@@ -3,26 +3,29 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # আমরা স্টেবল ভার্সন ব্যবহার করছি
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4  # ভার্সন ৪ ব্যবহার করছি
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -ig libncurses5
+          sudo apt install -y libncurses5 libstdc++6
           pip install --upgrade pip
           pip install buildozer kivy
 
       - name: Build with Buildozer
-        uses: ArtemSerebrennikov/buildozer-action@v1
-        with:
-          buildozer_version: stable
-          command: buildozer android debug
-          repository_display_name: MyPocoApp
+        # আমরা এখন অফিসিয়াল বা বেশি ব্যবহৃত স্টাইল ব্যবহার করছি
+        run: |
+          yes | buildozer android debug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # এখানে v3 বদলে v4 করে দিলাম
         with:
           name: package
           path: bin/*.apk
