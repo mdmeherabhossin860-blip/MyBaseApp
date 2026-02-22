@@ -1,4 +1,4 @@
-name: Final Skeleton Build
+name: Build Skeleton
 on: [push, pull_request]
 
 jobs:
@@ -7,22 +7,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: System Fix and Update
+      - name: Setup Tools
         run: |
-          # 404 এরর থেকে বাঁচার জন্য মিরর আপডেট
+          # 404 এরর এড়াতে মিরর ঠিক করা
           sudo apt update --fix-missing
-          # জাভা ইন্সটলেশন সহজ করা
           sudo apt install -y openjdk-17-jdk zip unzip
-          # সাইথন এবং বিল্ডোজার সেটআপ
           pip install --user --upgrade Cython==0.29.33 buildozer kivy
 
-      - name: Force Skeleton APK
+      - name: Create Skeleton
         run: |
           export PATH=$PATH:~/.local/bin
-          # কোনো আপডেট ডাউনলোড না করে সরাসরি লোকাল বিল্ড
-          yes | buildozer -v android debug
+          # শুধু খোল তৈরির জন্য দ্রুত কমান্ড
+          yes | buildozer android debug
 
-      - name: Save Skeleton
+      - name: Upload Skeleton
         uses: actions/upload-artifact@v4
         with:
           name: MySkeletonApp
