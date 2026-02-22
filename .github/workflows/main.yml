@@ -7,17 +7,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fast Install
+      - name: System Fix and Update
         run: |
-          pip install --user --upgrade Cython==0.29.33 buildozer kivy
-          # শুধু খোল বানানোর জন্য নূন্যতম টুলস
+          # 404 এরর থেকে বাঁচার জন্য মিরর আপডেট
+          sudo apt update --fix-missing
+          # জাভা ইন্সটলেশন সহজ করা
           sudo apt install -y openjdk-17-jdk zip unzip
+          # সাইথন এবং বিল্ডোজার সেটআপ
+          pip install --user --upgrade Cython==0.29.33 buildozer kivy
 
       - name: Force Skeleton APK
         run: |
           export PATH=$PATH:~/.local/bin
-          # এটি জোরাজুরি করে খোলটা বের করে আনবে
-          yes | buildozer -v android debug --keep-going
+          # কোনো আপডেট ডাউনলোড না করে সরাসরি লোকাল বিল্ড
+          yes | buildozer -v android debug
 
       - name: Save Skeleton
         uses: actions/upload-artifact@v4
