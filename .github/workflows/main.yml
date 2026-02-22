@@ -1,4 +1,4 @@
-name: Build Empty Skeleton
+name: Final Skeleton Build
 on: [push, pull_request]
 
 jobs:
@@ -7,20 +7,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Essential Tools
+      - name: Fast Install
         run: |
-          sudo apt update
-          sudo apt install -y openjdk-17-jdk python3-pip zip unzip
           pip install --user --upgrade Cython==0.29.33 buildozer kivy
+          # শুধু খোল বানানোর জন্য নূন্যতম টুলস
+          sudo apt install -y openjdk-17-jdk zip unzip
 
-      - name: Create Skeleton APK
+      - name: Force Skeleton APK
         run: |
           export PATH=$PATH:~/.local/bin
-          # শুধু খোলটা বানানোর কমান্ড
-          yes | buildozer android debug
+          # এটি জোরাজুরি করে খোলটা বের করে আনবে
+          yes | buildozer -v android debug --keep-going
 
-      - name: Save My APK
+      - name: Save Skeleton
         uses: actions/upload-artifact@v4
         with:
-          name: EmptyApp
+          name: MySkeletonApp
           path: bin/*.apk
