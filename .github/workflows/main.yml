@@ -1,20 +1,22 @@
-name: Final Skeleton Build
+name: Skeleton Build
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # আমরা স্টেবল পুরনো ভার্সন ব্যবহার করছি যাতে জ্যাম কম হয়
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Python and Cython
+      - name: Setup Basic Tools
         run: |
+          sudo apt update
+          sudo apt install -y openjdk-17-jdk python3-pip zip unzip libncurses5 libstdc++6
           pip install --user --upgrade Cython==0.29.33 buildozer kivy
 
       - name: Build Skeleton
         run: |
           export PATH=$PATH:~/.local/bin
-          # এটি শুধু প্রয়োজনীয় অংশগুলো ডাউনলোড করবে
+          # শুধু দ্রুত কাঠামো তৈরির জন্য কমান্ড
           yes | buildozer android debug
 
       - name: Upload APK
