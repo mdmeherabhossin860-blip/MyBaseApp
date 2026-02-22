@@ -1,9 +1,11 @@
-from kivy.app import App
-from kivy.uix.label import Label
+name: Skeleton Build
 
-class TestApp(App):
-    def build(self):
-        return Label(text='জি মেহেরাব স্যার,\nআপনার অ্যাপের কাঠামো রেডি!')
+on: [push]
 
-if __name__ == '__main__':
-    TestApp().run()
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run a one-line script
+        run: echo Hello, world!
