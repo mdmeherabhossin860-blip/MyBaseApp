@@ -1,4 +1,4 @@
-name: Build Skeleton APK
+name: Final Skeleton Build
 on: [push, pull_request]
 
 jobs:
@@ -7,27 +7,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Essential Tools
+      - name: Install Python and Cython
         run: |
-          # 404 এরর এড়াতে এবং সিস্টেম আপডেট করতে
-          sudo apt update --fix-missing
-          sudo apt install -y openjdk-17-jdk zip unzip libncurses6 libstdc++6
-          pip install --upgrade pip
-          pip install --user Cython==0.29.33 buildozer kivy
+          pip install --user --upgrade Cython==0.29.33 buildozer kivy
 
-      - name: Force Create Skeleton
+      - name: Build Skeleton
         run: |
           export PATH=$PATH:~/.local/bin
-          # শুধু খোল তৈরির জন্য দ্রুততম কমান্ড
+          # এটি শুধু প্রয়োজনীয় অংশগুলো ডাউনলোড করবে
           yes | buildozer android debug
 
-      - name: Save My APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: MyEmptyApp
+          name: MySkeletonApp
           path: bin/*.apk
