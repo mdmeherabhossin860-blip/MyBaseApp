@@ -1,4 +1,4 @@
-name: Build Skeleton
+name: Build Empty App
 on: [push, pull_request]
 
 jobs:
@@ -7,21 +7,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Tools
+      - name: Setup Basic Tools
         run: |
-          # 404 এরর এড়াতে মিরর ঠিক করা
+          # সব আপডেট এড়িয়ে শুধু প্রয়োজনীয় টুলস
           sudo apt update --fix-missing
-          sudo apt install -y openjdk-17-jdk zip unzip
+          sudo apt install -y openjdk-17-jdk zip unzip bzip2 libncurses5 libstdc++6
           pip install --user --upgrade Cython==0.29.33 buildozer kivy
 
-      - name: Create Skeleton
+      - name: Create App Skeleton
         run: |
           export PATH=$PATH:~/.local/bin
-          # শুধু খোল তৈরির জন্য দ্রুত কমান্ড
+          # এটি জোরাজুরি করে খোলটা বের করে আনবে এবং অদরকারি ডাউনলোড কমাবে
           yes | buildozer android debug
 
-      - name: Upload Skeleton
+      - name: Export APK
         uses: actions/upload-artifact@v4
         with:
-          name: MySkeletonApp
+          name: MyEmptyApp
           path: bin/*.apk
